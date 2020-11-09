@@ -8,9 +8,12 @@
     "**/*"
   ],
   "scripts": {
-    "build": "rm -rf ./dist && tsc",
+    "build": "npm run clean && npm run compile",
+    "clean": "rm -rf ./dist",
+    "compile": "tsc",
     "lint": "tslint --config tslint.json --project .",
-    "test": "jest"
+    "test": "npm run build && npm run test:run",
+    "test:run": "jest"
   },
   "keywords": [],
   "author": "MIPW Lda. <hello@mipw.pt> (www.mipw.pt)",
