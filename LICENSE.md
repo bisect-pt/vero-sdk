@@ -1,0 +1,3 @@
+Copyright (c) 2020 MIPW Lda.
+
+ALL RIGHTS RESERVED.
