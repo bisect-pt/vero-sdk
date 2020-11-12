@@ -2,6 +2,8 @@ import http from 'http';
 import https from 'https';
 import io from 'socket.io-client';
 import { StringDecoder } from 'string_decoder';
+import fs from 'fs';
+import formData from 'form-data';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -29,7 +31,7 @@ const makeRequest = (
 };
 
 const handleHttpResponse = (res: http.IncomingMessage, resolve: resolver, reject: rejector): void => {
-    let body: string = '';
+    let body = '';
     const decoder: StringDecoder = new StringDecoder('utf8');
     res.on('data', (data: Buffer) => (body += decoder.write(data)));
     res.on('end', () => {
@@ -79,6 +81,41 @@ export async function post(baseUrl: string, authToken: string | null, endpoint: 
     });
 }
 
+export async function putStream(
+    baseUrl: string,
+    authToken: string | null,
+    endpoint: string,
+    path: string,
+    tag: string
+): Promise<any> {
+    const form = new formData();
+    form.append(tag, fs.createReadStream(path));
+
+    const headers: http.OutgoingHttpHeaders = {
+        ...form.getHeaders()
+    };
+
+    if (authToken !== null) {
+        headers.Authorization = `Bearer ${authToken}`;
+    }
+
+    const options: IRequestOptionsExt = {
+        headers,
+        method: 'PUT',
+        rejectUnauthorized: false,
+    };
+
+    return new Promise((resolve, reject): void => {
+        const callback = (res: http.IncomingMessage): void => handleHttpResponse(res, resolve, reject);
+        const req: http.ClientRequest = makeRequest(`${baseUrl}${endpoint}`, options, callback);
+        form.pipe(req);
+        req.on('error', reject);
+        req.on('response', function(res) {
+            console.log(res.statusCode);
+          });
+    });
+}
+
 export async function get(baseUrl: string, authToken: string, endpoint: string): Promise<any> {
     const headers: http.OutgoingHttpHeaders = {
         Authorization: `Bearer ${authToken}`,
@@ -87,6 +124,25 @@ export async function get(baseUrl: string, authToken: string, endpoint: string):
     const options = {
         headers,
         method: 'GET',
+        rejectUnauthorized: false,
+    };
+
+    return new Promise((resolve, reject): void => {
+        const callback = (res: http.IncomingMessage): void => handleHttpResponse(res, resolve, reject);
+        const req: http.ClientRequest = makeRequest(`${baseUrl}${endpoint}`, options, callback);
+        req.on('error', reject);
+        req.end();
+    });
+}
+
+export async function deleteRequest(baseUrl: string, authToken: string, endpoint: string): Promise<any> {
+    const headers: http.OutgoingHttpHeaders = {
+        Authorization: `Bearer ${authToken}`,
+    };
+
+    const options = {
+        headers,
+        method: 'DELETE',
         rejectUnauthorized: false,
     };
 
@@ -146,12 +202,12 @@ interface IWSMessage {
 // - the value returned by condition, if succeeded
 // - undefined, if timeout
 // condition should return a truthy value to indicate that the event is accepted.
-export function makeAwaiter(
+export function makeAwaiter<TResponse>(
     ws: SocketIOClient.Socket,
     eventName: string,
-    condition: any,
+    condition: (data: any) => TResponse | false,
     timeoutMs: number
-): Promise<any> {
+): Promise<TResponse | undefined> {
     return new Promise((resolve, reject) => {
         const timer = setTimeout(() => {
             ws.off('message', callback);

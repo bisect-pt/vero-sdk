@@ -11,7 +11,6 @@
     "build": "npm run clean && npm run compile",
     "clean": "rm -rf ./dist",
     "compile": "tsc",
-    "lint": "tslint --config tslint.json --project .",
     "test": "npm run build && npm run test:run",
     "test:run": "jest"
   },
@@ -32,7 +31,7 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
-    "ebu-list-sdk": "file:../dependencies/ebu-list-sdk/lib",
+    "form-data": "^3.0.0",
     "http": "0.0.1-security",
     "https": "^1.0.0",
     "lodash": "^4.17.20",

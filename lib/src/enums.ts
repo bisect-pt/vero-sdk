@@ -39,12 +39,6 @@ export enum Collections {
     senderProfiles = 'senderProfiles',
 }
 
-export enum GenlockFamily {
-    genlock25 = 'genlock25',
-    genlock30M = 'genlock30M',
-    genlock30 = 'genlock30',
-}
-
 export enum StateMachine {
     Starting = 'Starting',
     Started = 'Started',
