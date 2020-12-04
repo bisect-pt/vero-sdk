@@ -1,8 +1,7 @@
 import _ from 'lodash';
+import { types } from '@mipw/vero-api';
 import { login } from './auth';
 import { createWebSocketClient } from './common';
-import { CaptureJobStates, Collections, GeneratorChannelId, SocketEvent, StateMachine } from './enums';
-import * as types from './types';
 import { Transport } from './transport';
 import { User } from './user';
 import { Settings } from './settings';
@@ -18,7 +17,7 @@ interface ICaptureJob {
 // Extracts the current profile Id of the channel with id 'channelId'
 // If the channel is not active, returns undefined
 // TODO: proper types
-const getCurrentProfileId = (data: types.IGeneratorStatus, channelId: GeneratorChannelId): string | undefined => {
+const getCurrentProfileId = (data: types.IGeneratorStatus, channelId: types.GeneratorChannelId): string | undefined => {
     const senders = _.get(data, `[0].generator.senders`);
     if (!senders) {
         return undefined;
@@ -30,7 +29,7 @@ const getCurrentProfileId = (data: types.IGeneratorStatus, channelId: GeneratorC
     const generatorProfileId = _.get(sender, 'generator_profile_id');
     const status = _.get(sender, 'status');
 
-    if (status !== StateMachine.Started) {
+    if (status !== types.StateMachine.Started) {
         return undefined;
     }
     return generatorProfileId;
@@ -75,13 +74,13 @@ export class Vero {
         return new SignalGenerator(this.transport);
     }
 
-    public async startGenerator(channelId: GeneratorChannelId, profile: types.IGeneratorProfile): Promise<any> {
+    public async startGenerator(channelId: types.GeneratorChannelId, profile: types.IGeneratorProfile): Promise<any> {
         return this.transport.post(`/sendergroup/${channelId}/start`, { profile });
     }
 
-    public makeGeneratorAwaiter(channelId: GeneratorChannelId, profileId: string, timeoutMs: number): Promise<any> {
+    public makeGeneratorAwaiter(channelId: types.GeneratorChannelId, profileId: string, timeoutMs: number): Promise<any> {
         return this.transport.makeAwaiter(
-            SocketEvent.generatorStatus,
+            types.SocketEvent.generatorStatus,
             (data: types.IGeneratorStatus) => {
                 const id = getCurrentProfileId(data, channelId);
                 return id === profileId;
@@ -90,7 +89,7 @@ export class Vero {
         );
     }
 
-    public async stopGenerator(channelId: GeneratorChannelId): Promise<any> {
+    public async stopGenerator(channelId: types.GeneratorChannelId): Promise<any> {
         return this.transport.post(`/sendergroup/${channelId}/stop`, {});
     }
 
@@ -100,9 +99,9 @@ export class Vero {
 
     public makeCaptureAwaiter(captureId: string, timeoutMs: number): Promise<any> {
         return this.transport.makeAwaiter(
-            SocketEvent.collectionUpdate,
+            types.SocketEvent.collectionUpdate,
             (data: any) => {
-                if (data.collection !== Collections.captureJobs) {
+                if (data.collection !== types.Collections.captureJobs) {
                     return false;
                 }
                 const updated = data.updated || [];
@@ -110,7 +109,7 @@ export class Vero {
                 if (!job) {
                     return false;
                 }
-                if (job.state !== CaptureJobStates.Completed) {
+                if (job.state !== types.CaptureJobStates.Completed) {
                     return false;
                 }
                 return job;

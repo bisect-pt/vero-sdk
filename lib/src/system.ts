@@ -1,4 +1,4 @@
-import * as types from './types';
+import { types } from '@mipw/vero-api';
 import { Transport } from './transport';
 import { License } from './license';
 

@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import * as types from './types';
+import { types } from '@mipw/vero-api';
 import { Transport } from './transport';
-import { SocketEvent } from './enums';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -18,7 +17,7 @@ export class Settings {
 
     public makeGenlockAwaiter(family: types.GenlockFamily, timeoutMs: number): Promise<types.IGenlockStatus | undefined> {
         return this.transport.makeAwaiter<types.IGenlockStatus>(
-            SocketEvent.generatorStatus,
+            types.SocketEvent.generatorStatus,
             (data: any) => {
                 console.log(`************************************ response: ${JSON.stringify(data)}`);
                 console.log(`************************************ response: ${JSON.stringify(data)}`);

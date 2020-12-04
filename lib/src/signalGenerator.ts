@@ -1,4 +1,3 @@
-import * as types from './types';
 import { Transport } from './transport';
 import { SenderProfiles } from './senderProfiles';
 

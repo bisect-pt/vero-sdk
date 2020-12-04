@@ -1,2 +1,3 @@
 export { Vero } from './vero';
-export * as types from './types';
+import { types } from '@mipw/vero-api';
+export { types };

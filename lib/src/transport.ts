@@ -1,5 +1,4 @@
 import { get, makeAwaiter, post, deleteRequest, validateResponseCode, putStream } from './common';
-import { logger } from './logger';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -20,11 +19,13 @@ export class Transport {
     }
 
     private handleWsError(error: any): void {
-        logger.error(`WebSocket error: ${error}`);
+        // TODO: pass this to an external logger and handle the error
+        console.error(`WebSocket error: ${error}`);
     }
 
     private handleWsConnectError(error: any): void {
-        logger.error(`WebSocket connection error: ${error}`);
+        // TODO: pass this to an external logger and handle the error
+        console.error(`WebSocket connection error: ${error}`);
     }
 
     public async get(endpoint: string): Promise<any> {

@@ -110,9 +110,7 @@ export async function putStream(
         const req: http.ClientRequest = makeRequest(`${baseUrl}${endpoint}`, options, callback);
         form.pipe(req);
         req.on('error', reject);
-        req.on('response', function(res) {
-            console.log(res.statusCode);
-          });
+        req.on('response', () => resolve());
     });
 }
 
