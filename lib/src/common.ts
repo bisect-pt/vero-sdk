@@ -87,7 +87,7 @@ export async function putStream(
     endpoint: string,
     path: string,
     tag: string
-): Promise<any> {
+): Promise<void> {
     const form = new formData();
     form.append(tag, fs.createReadStream(path));
 
@@ -105,7 +105,7 @@ export async function putStream(
         rejectUnauthorized: false,
     };
 
-    return new Promise((resolve, reject): void => {
+    return new Promise((resolve, reject) => {
         const callback = (res: http.IncomingMessage): void => handleHttpResponse(res, resolve, reject);
         const req: http.ClientRequest = makeRequest(`${baseUrl}${endpoint}`, options, callback);
         form.pipe(req);
