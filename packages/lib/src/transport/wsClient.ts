@@ -24,10 +24,15 @@ export default class WSCLient {
             rejectUnauthorized: false,
             transports: ['websocket', 'polling'],
         });
-
-        this.client.on('connect', () => {
+        if(userId){
+            this.client.on('connect', () => {
+                this.client.emit('register', userId);
+            });
+        }else{
+            this.client.on('connect', () => {
             this.client.emit('register', this.client.id);
-        });
+        });}
+        
 
         this.client.on('error', handleWsError);
         this.client.on('connect_error', handleWsConnectError);
