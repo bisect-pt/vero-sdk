@@ -29,20 +29,14 @@ export enum Status {
     completed = 'completed',
 }
 
-export interface IStatusMessageData {
-    pcap: types.IPcapInfo;
-    streams: types.IStreamInfo[];
-}
 
 export interface IStatusMessage {
-    data: IStatusMessageData; // Analysis data
     progress: number; // completion percentage
     status: Status;
     workflow_id: string; // workflow ID passed on the request
 }
 
 export function isStatusMessage(v: any): v is IStatusMessage {
-    if ((v as IStatusMessage).data === undefined) return false;
     if ((v as IStatusMessage).progress === undefined) return false;
     if ((v as IStatusMessage).status === undefined) return false;
     if ((v as IStatusMessage).workflow_id === undefined) return false;

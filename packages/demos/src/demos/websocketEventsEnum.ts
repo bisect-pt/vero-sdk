@@ -1,7 +1,0 @@
-export default {
-    PCAP: {
-        FILE_RECEIVED: 'PCAP_FILE_RECEIVED',
-        FILE_PROCESSED: 'PCAP_FILE_PROCESSED',
-        FILE_PROCESSING_DONE: 'PCAP_FILE_PROCESSING_DONE',
-    },
-};
