@@ -10,15 +10,34 @@ import { get, post } from './transport/common';
 import { RestClient } from './transport/restClient';
 import WSCLient from './transport/wsClient';
 import TokenStorage from './tokenStorage';
+import _ from 'lodash';
+import {GeneratorChannelId, IGeneratorProfile, ICaptureSettings, ICaptureJob, SocketEvent, CaptureJobStates, Collections, IGeneratorStatus, StateMachine} from './api/generator'
 
 // ////////////////////////////////////////////////////////////////////////////
+const getCurrentProfileId = (data: IGeneratorStatus, channelId: GeneratorChannelId): string | undefined => {
+    const senders = _.get(data, `[0].generator.senders`);
+    if (!senders) {
+        return undefined;
+    }
+    const sender = senders.find((s: any) => s.group_id === channelId);
+    if (!sender) {
+        return undefined;
+    }
+    const generatorProfileId = _.get(sender, 'generator_profile_id');
+    const status = _.get(sender, 'status');
 
+    if (status !== StateMachine.Started) {
+        return undefined;
+    }
+    return generatorProfileId;
+};
 const makeApiHandler = (baseUrl: string): IApiHandler => ({
     login: async (data: ILoginData): Promise<IGenericResponse<ILoginResponse>> =>
         post(baseUrl, null, '/auth/login', data),
     revalidateToken: async (token: string): Promise<IGenericResponse<ILoginResponse>> =>
         get(baseUrl, token, '/api/user/revalidate-token'),
 });
+
 
 export default class VERO {
     private readonly transport: Transport;
@@ -39,7 +58,13 @@ export default class VERO {
             unwinder.add(() => this.authClient.close());
 
             this.rest = new RestClient(baseUrl, this.authClient.getToken.bind(this.authClient));
-            this.transport = new Transport(this.rest);
+            const wsGetter = () => {
+                if(this.ws === undefined){
+                    throw new Error("Not logged in");
+                } 
+                return this.ws.client;
+        }
+            this.transport = new Transport(this.rest, wsGetter);
 
             unwinder.reset();
         } finally {
@@ -53,7 +78,7 @@ export default class VERO {
             throw loginError;
         }
         const user: apiTypes.user.IUserInfo = (await this.rest.get('/api/user')) as apiTypes.user.IUserInfo;
-        this.ws = new WSCLient(this.baseUrl, '/socket', user.id);
+        this.ws = new WSCLient(this.baseUrl, '/socket');
     }
 
     public async close(): Promise<void> {
@@ -88,4 +113,51 @@ export default class VERO {
     public async logout(): Promise<void> {
         return this.transport.post('/auth/logout', {});
     }
+
+    public async startGenerator(channelId: GeneratorChannelId, profile: IGeneratorProfile): Promise<any> {
+        return this.transport.post(`/sendergroup/${channelId}/start`, { profile });
+    }
+
+    
+
+    public makeGeneratorAwaiter(channelId: GeneratorChannelId, profileId: string, timeoutMs: number): Promise<any> {
+        return this.transport.makeAwaiter(
+            SocketEvent.generatorStatus,
+            (data: IGeneratorStatus) => {
+                const id = getCurrentProfileId(data, channelId);
+                return id === profileId;
+            },
+            timeoutMs
+        );
+    }
+
+    public async stopGenerator(channelId: GeneratorChannelId): Promise<any> {
+        return this.transport.post(`/sendergroup/${channelId}/stop`, {});
+    }
+
+    public async startCapture(settings: ICaptureSettings): Promise<any> {
+        return this.transport.post('/capture/capture', settings);
+    }
+
+    public makeCaptureAwaiter(captureId: string, timeoutMs: number): Promise<any> {
+        return this.transport.makeAwaiter(
+            SocketEvent.collectionUpdate,
+            (data: any) => {
+                if (data.collection !== Collections.captureJobs) {
+                    return false;
+                }
+                const updated = data.updated || [];
+                const job = updated.find((u: ICaptureJob) => u.id === captureId);
+                if (!job) {
+                    return false;
+                }
+                if (job.state !== CaptureJobStates.Completed) {
+                    return false;
+                }
+                return job;
+            },
+            timeoutMs
+        );
+    }
+
 }

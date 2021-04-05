@@ -185,7 +185,7 @@ export async function putForm(
     authToken: string | null,
     endpoint: string,
     entries: IPutEntry[],
-    callback: UploadProgressCallback
+    callback?: UploadProgressCallback
 ): Promise<any> {
     const form = new XFormData();
     entries.forEach(entry => form.append(entry.name, entry.value));
@@ -198,8 +198,10 @@ export async function putForm(
             const percentCompleted = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
 
             const info = { percentage: percentCompleted };
-
-            callback(info);
+            if(callback){
+                callback(info);
+            }
+            
         },
     };
 
@@ -258,6 +260,43 @@ export async function del(baseUrl: string, authToken: string, endpoint: string):
         req.end();
     });
 }
+
+export interface IWSMessage {
+    event: string;
+    data: any;
+}
+// Returns a promise which resolves to:
+// - the value returned by condition, if succeeded
+// - undefined, if timeout
+// condition should return a truthy value to indicate that the event is accepted.
+export function makeAwaiter<TResponse>(
+    ws: SocketIOClient.Socket,
+    eventName: string,
+    condition: (data: any) => TResponse | false,
+    timeoutMs: number
+): Promise<TResponse | undefined> {
+    return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => {
+            ws.off('message', callback);
+            resolve(undefined);
+        }, timeoutMs);
+
+        const callback = (msg: IWSMessage) => {
+            if (msg.event !== eventName) {
+                return;
+            }
+            const result = condition(msg.data);
+            if (result) {
+                clearTimeout(timer);
+                ws.off('message', callback);
+                resolve(result);
+            }
+        };
+
+        ws.on('message', callback);
+    });
+}
+
 
 declare interface IResponseBase {
     result: number;

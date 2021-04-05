@@ -13,7 +13,7 @@ function handleWsConnectError(error: any): void {
 export default class WSCLient {
     public readonly client: SocketIOClient.Socket;
 
-    public constructor(url: string, path: string, userId: string) {
+    public constructor(url: string, path: string, userId?: string) {
         this.client = (null as unknown) as SocketIOClient.Socket;
         this.client = SocketIOClient(url, {
             autoConnect: true,
@@ -26,7 +26,7 @@ export default class WSCLient {
         });
 
         this.client.on('connect', () => {
-            this.client.emit('register', userId);
+            this.client.emit('register', this.client.id);
         });
 
         this.client.on('error', handleWsError);
