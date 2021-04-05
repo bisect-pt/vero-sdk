@@ -1,3 +1,3 @@
 export * as api  from './api';
 export * as types  from './types';
-export { default as LIST } from './vero';
+export { default as VERO } from './vero';

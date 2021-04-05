@@ -1,25 +1,25 @@
-import { types } from '@mipw/vero-api';
+import { IVersion } from './api/system';
 import { Transport } from './transport';
 import { License } from './license';
 
 //////////////////////////////////////////////////////////////////////////////
 
-export class System {
+export default class System {
     public constructor(private readonly transport: Transport) {}
 
     public get license(): License {
         return new License(this.transport);
     }
 
-    public async getVersion(): Promise<types.IVersion> {
-        return this.transport.get('/version');
+    public async getVersion(): Promise<IVersion> {
+       return await this.transport.get('/api/version');
     }
 
     public async resetDatabase(): Promise<void> {
-        return this.transport.post('/system/drop', {});
+        return await this.transport.post('/api/system/drop', {});
     }
 
     public async restartServices(): Promise<void> {
-        return this.transport.post('/system/restartServices', {});
+        return await this.transport.post('/api/system/restartServices', {});
     }
 }

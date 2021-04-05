@@ -4,6 +4,7 @@
   "devDependencies": {
     "@types/form-data": "^2.5.0",
     "@types/jest": "^26.0.22",
+    "@types/lodash": "^4.14.168",
     "lerna": "^4.0.0"
   }
 }

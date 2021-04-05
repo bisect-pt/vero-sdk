@@ -1,10 +1,10 @@
 import { Unwinder } from '@bisect/bisect-core-ts';
 import * as apiTypes from './api';
 import { AuthClient, ILoginData, IApiHandler, IGenericResponse, ILoginResponse } from './auth';
-import { Info } from './info';
-import { Live } from './live';
-import Pcap from './pcap';
-import Stream from './stream';
+import SignalGenerator from './signalGenerator'
+import Settings from './settings';
+import System from './system';
+import User from './user';
 import { Transport } from './transport';
 import { get, post } from './transport/common';
 import { RestClient } from './transport/restClient';
@@ -52,7 +52,7 @@ export default class VERO {
         if (loginError) {
             throw loginError;
         }
-        const user: apiTypes.user.IUserInfo = (await this.rest.get('/user')) as apiTypes.user.IUserInfo;
+        const user: apiTypes.user.IUserInfo = (await this.rest.get('/api/user')) as apiTypes.user.IUserInfo;
         this.ws = new WSCLient(this.baseUrl, '/socket', user.id);
     }
 
@@ -69,19 +69,19 @@ export default class VERO {
         return this.ws?.client;
     }
 
-    public get system(): System {
+    public get system() {
         return new System(this.transport);
     }
 
-    public get user(): User {
+    public get user() {
         return new User(this.transport);
     }
 
-    public get settings(): Settings {
+    public get settings() {
         return new Settings(this.transport);
     }
 
-    public get signalGenerator(): SignalGenerator {
+    public get signalGenerator() {
         return new SignalGenerator(this.transport);
     }
 
