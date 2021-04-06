@@ -1,4 +1,4 @@
-export enum SettingsEvents {
+export enum SocketEvents {
     /*
     Collection update
     Payload= {
@@ -17,4 +17,19 @@ export enum SettingsEvents {
     generatorStatus = 'GENERATOR_STATUS',
     capturestatus = 'CAPTURE_STATUS',
     captureJobStatus = 'CAPTUREJOB_STATUS',
+}
+
+export enum Collections {
+    captureJobs = 'captureJobs',
+    captureSources = 'captureSources',
+    senderProfiles = 'senderProfiles',
+}
+
+export enum CaptureJobStates {
+    Waiting = 'waiting',
+    Active = 'active',
+    Completed = 'completed',
+    Analyzing = 'analyzing',
+    Analyzed = 'analyzed',
+    Failed = 'failed',
 }

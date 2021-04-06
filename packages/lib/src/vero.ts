@@ -1,19 +1,20 @@
-import { Unwinder } from '@bisect/bisect-core-ts';
+import { Unwinder, Transport, RestClient, get, post, WSCLient} from '@bisect/bisect-core-ts';
 import * as apiTypes from './api';
 import { AuthClient, ILoginData, IApiHandler, IGenericResponse, ILoginResponse } from './auth';
 import SignalGenerator from './signalGenerator'
 import Settings from './settings';
 import System from './system';
 import User from './user';
-import { Transport } from './transport';
-import { get, post } from './transport/common';
-import { RestClient } from './transport/restClient';
-import WSCLient from './transport/wsClient';
+// import { Transport } from './transport';
+// import { RestClient } from './transport/restClient';
+// import { get, post } from './transport/common';
+// import WSCLient from './transport/wsClient';
 import TokenStorage from './tokenStorage';
 import _ from 'lodash';
-import {GeneratorChannelId, IGeneratorProfile, ICaptureSettings, ICaptureJob, SocketEvent, CaptureJobStates, Collections, IGeneratorStatus, StateMachine} from './api/generator'
+import { GeneratorChannelId, IGeneratorProfile, ICaptureSettings, ICaptureJob, IGeneratorStatus, StateMachine } from './api/generator'
+import { SocketEvents, CaptureJobStates, Collections } from './api/wsEvents'
+//////////////////////////////////////////////////////////////////////////////
 
-// ////////////////////////////////////////////////////////////////////////////
 const getCurrentProfileId = (data: IGeneratorStatus, channelId: GeneratorChannelId): string | undefined => {
     const senders = _.get(data, `[0].generator.senders`);
     if (!senders) {
@@ -31,13 +32,13 @@ const getCurrentProfileId = (data: IGeneratorStatus, channelId: GeneratorChannel
     }
     return generatorProfileId;
 };
+
 const makeApiHandler = (baseUrl: string): IApiHandler => ({
     login: async (data: ILoginData): Promise<IGenericResponse<ILoginResponse>> =>
         post(baseUrl, null, '/auth/login', data),
     revalidateToken: async (token: string): Promise<IGenericResponse<ILoginResponse>> =>
         get(baseUrl, token, '/api/user/revalidate-token'),
 });
-
 
 export default class VERO {
     private readonly transport: Transport;
@@ -115,14 +116,12 @@ export default class VERO {
     }
 
     public async startGenerator(channelId: GeneratorChannelId, profile: IGeneratorProfile): Promise<any> {
-        return this.transport.post(`/sendergroup/${channelId}/start`, { profile });
+        return this.transport.post(`/api/sendergroup/${channelId}/start`, { profile });
     }
-
-    
 
     public makeGeneratorAwaiter(channelId: GeneratorChannelId, profileId: string, timeoutMs: number): Promise<any> {
         return this.transport.makeAwaiter(
-            SocketEvent.generatorStatus,
+            SocketEvents.generatorStatus,
             (data: IGeneratorStatus) => {
                 const id = getCurrentProfileId(data, channelId);
                 return id === profileId;
@@ -132,16 +131,16 @@ export default class VERO {
     }
 
     public async stopGenerator(channelId: GeneratorChannelId): Promise<any> {
-        return this.transport.post(`/sendergroup/${channelId}/stop`, {});
+        return this.transport.post(`/api/sendergroup/${channelId}/stop`, {});
     }
 
     public async startCapture(settings: ICaptureSettings): Promise<any> {
-        return this.transport.post('/capture/capture', settings);
+        return this.transport.post('/api/capture/capture', settings);
     }
 
     public makeCaptureAwaiter(captureId: string, timeoutMs: number): Promise<any> {
         return this.transport.makeAwaiter(
-            SocketEvent.collectionUpdate,
+            SocketEvents.collectionUpdate,
             (data: any) => {
                 if (data.collection !== Collections.captureJobs) {
                     return false;

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { ISettings, IGenlockSettings, GenlockFamily, IGenlockStatus,INmosSettings, IPtpSettings } from './api/settings';
-import { SettingsEvents } from './api/wsEvents'
-import { Transport } from './transport';
+import { SocketEvents } from './api/wsEvents'
+import { Transport} from '@bisect/bisect-core-ts';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -18,7 +18,7 @@ export default class Settings {
 
     public makeGenlockAwaiter(family: GenlockFamily, timeoutMs: number): Promise<IGenlockStatus | undefined> {
         return this.transport.makeAwaiter<IGenlockStatus>(
-            SettingsEvents.generatorStatus,
+            SocketEvents.generatorStatus,
             (data: any) => {
                 console.log(`************************************ response: ${JSON.stringify(data)}`);
                 console.log(`************************************ response: ${JSON.stringify(data)}`);

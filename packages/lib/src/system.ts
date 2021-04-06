@@ -1,5 +1,5 @@
 import { IVersion } from './api/system';
-import { Transport } from './transport';
+import { Transport} from '@bisect/bisect-core-ts';
 import { License } from './license';
 
 //////////////////////////////////////////////////////////////////////////////

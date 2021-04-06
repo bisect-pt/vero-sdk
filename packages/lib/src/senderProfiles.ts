@@ -1,5 +1,5 @@
 import { IGeneratorProfile } from './api/senderProfiles';
-import { Transport } from './transport';
+import { Transport} from '@bisect/bisect-core-ts';
 
 //////////////////////////////////////////////////////////////////////////////
 

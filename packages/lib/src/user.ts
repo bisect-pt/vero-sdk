@@ -1,5 +1,5 @@
 import { IUserInfo } from './api/user';
-import { Transport } from './transport';
+import { Transport} from '@bisect/bisect-core-ts';
 
 //////////////////////////////////////////////////////////////////////////////
 
