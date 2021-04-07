@@ -1,5 +1,5 @@
 {
-    "name": "@bisect/ebu-list-sdk",
+    "name": "@mipw/vero-sdk",
     "version": "0.1.0",
     "description": "",
     "main": "dist/index.js",
@@ -14,16 +14,6 @@
     },
     "keywords": [],
     "author": "Bisect Lda. <info@bisect.pt> (www.bisect.pt)",
-    "contributors": [
-        {
-            "name": "CBC/Radio-Canada",
-            "email": "patrick.keroulas@radio-canada.ca"
-        },
-        {
-            "name": "Pedro Ferreira",
-            "email": "pedro@bisect.pt"
-        }
-    ],
     "license": "MIT",
     "private": false,
     "devDependencies": {
