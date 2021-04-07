@@ -1,0 +1,4 @@
+{
+    "packages": ["packages/*", "third-party/bisect-core-ts"],
+    "version": "0.0.0"
+}
