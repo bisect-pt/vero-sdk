@@ -1,3 +1,0 @@
-[submodule "third-party/bisect-core-ts"]
-	path = third-party/bisect-core-ts
-	url = https://github.com/bisect-pt/bisect-core-ts
