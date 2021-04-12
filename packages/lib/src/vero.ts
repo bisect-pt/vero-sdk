@@ -1,7 +1,7 @@
-import { Unwinder, Transport, RestClient, get, post, WSCLient} from '@bisect/bisect-core-ts';
+import { Unwinder, Transport, RestClient, get, post, WSCLient } from '@bisect/bisect-core-ts';
 import * as apiTypes from './api';
 import { AuthClient, ILoginData, IApiHandler, IGenericResponse, ILoginResponse } from './auth';
-import SignalGenerator from './signalGenerator'
+import SignalGenerator from './signalGenerator';
 import Settings from './settings';
 import System from './system';
 import User from './user';
@@ -11,8 +11,15 @@ import User from './user';
 // import WSCLient from './transport/wsClient';
 import TokenStorage from './tokenStorage';
 import _ from 'lodash';
-import { GeneratorChannelId, IGeneratorProfile, ICaptureSettings, ICaptureJob, IGeneratorStatus, StateMachine } from './api/generator'
-import { SocketEvents, CaptureJobStates, Collections } from './api/wsEvents'
+import {
+    GeneratorChannelId,
+    IGeneratorProfile,
+    ICaptureSettings,
+    ICaptureJob,
+    IGeneratorStatus,
+    StateMachine,
+} from './api/generator';
+import { SocketEvents, CaptureJobStates, Collections } from './api/wsEvents';
 //////////////////////////////////////////////////////////////////////////////
 
 const getCurrentProfileId = (data: IGeneratorStatus, channelId: GeneratorChannelId): string | undefined => {
@@ -60,11 +67,11 @@ export default class VERO {
 
             this.rest = new RestClient(baseUrl, this.authClient.getToken.bind(this.authClient));
             const wsGetter = () => {
-                if(this.ws === undefined){
-                    throw new Error("Not logged in");
-                } 
+                if (this.ws === undefined) {
+                    throw new Error('Not logged in');
+                }
                 return this.ws.client;
-        }
+            };
             this.transport = new Transport(this.rest, wsGetter);
 
             unwinder.reset();
@@ -76,9 +83,10 @@ export default class VERO {
     public async login(username: string, password: string): Promise<void> {
         const loginError = await this.authClient.login(username, password);
         if (loginError) {
+            console.log(`Vero.login ${JSON.stringify(loginError)}`);
             throw loginError;
         }
-        const user: apiTypes.user.IUserInfo = (await this.rest.get('/api/user')) as apiTypes.user.IUserInfo;
+        // const user: apiTypes.user.IUserInfo = (await this.rest.get('/api/user')) as apiTypes.user.IUserInfo;
         this.ws = new WSCLient(this.baseUrl, '/socket');
     }
 
@@ -158,5 +166,4 @@ export default class VERO {
             timeoutMs
         );
     }
-
 }

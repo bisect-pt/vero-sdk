@@ -1,6 +1,7 @@
 import { IVersion } from './api/system';
-import { Transport} from '@bisect/bisect-core-ts';
+import { Transport } from '@bisect/bisect-core-ts';
 import { License } from './license';
+import { resolveResponse } from './utils';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -12,7 +13,7 @@ export default class System {
     }
 
     public async getVersion(): Promise<IVersion> {
-       return await this.transport.get('/api/version');
+        return resolveResponse(await this.transport.get('/api/version'));
     }
 
     public async resetDatabase(): Promise<void> {

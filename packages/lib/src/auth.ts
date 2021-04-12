@@ -75,7 +75,11 @@ export class AuthClient {
                 this.setToken(response.content.token);
             }
 
-            return;
+            if (!response.content.success) {
+                throw new Error('Login failed');
+            }
+
+            return undefined;
         } catch (err) {
             this.invalidateToken();
             return err;

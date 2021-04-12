@@ -1,7 +1,15 @@
 import _ from 'lodash';
-import { ISettings, IGenlockSettings, GenlockFamily, IGenlockStatus,INmosSettings, IPtpSettings } from './api/settings';
-import { SocketEvents } from './api/wsEvents'
-import { Transport} from '@bisect/bisect-core-ts';
+import {
+    ISettings,
+    IGenlockSettings,
+    GenlockFamily,
+    IGenlockStatus,
+    INmosSettings,
+    IPtpSettings,
+} from './api/settings';
+import { SocketEvents } from './api/wsEvents';
+import { Transport } from '@bisect/bisect-core-ts';
+import { resolveResponse } from './utils';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -9,11 +17,11 @@ export default class Settings {
     public constructor(private readonly transport: Transport) {}
 
     public async getAll(): Promise<ISettings> {
-        return await this.transport.get('/api/settings');
+        return resolveResponse(await this.transport.get('/api/settings'));
     }
 
     public async setGenlock(settings: IGenlockSettings): Promise<void> {
-        return await this.transport.post('/api/settings/genlock', settings);
+        return resolveResponse(await this.transport.post('/api/settings/genlock', settings));
     }
 
     public makeGenlockAwaiter(family: GenlockFamily, timeoutMs: number): Promise<IGenlockStatus | undefined> {
@@ -22,7 +30,7 @@ export default class Settings {
             (data: any) => {
                 console.log(`************************************ response: ${JSON.stringify(data)}`);
                 console.log(`************************************ response: ${JSON.stringify(data)}`);
-            
+
                 // TODO: use a proper type for the event
                 const current = _.get(data, '[0].genlock');
                 if (current === undefined) {
@@ -48,10 +56,10 @@ export default class Settings {
     }
 
     public async setNmos(settings: Partial<INmosSettings>): Promise<void> {
-        return await this.transport.post('/api/settings/nmos', settings);
+        return resolveResponse(await this.transport.post('/api/settings/nmos', settings));
     }
 
     public async setPtp(settings: Partial<IPtpSettings>): Promise<void> {
-        return await this.transport.post('/api/settings/ptp', settings);
+        return resolveResponse(await this.transport.post('/api/settings/ptp', settings));
     }
 }
