@@ -86,7 +86,7 @@ export default class VERO {
             console.log(`Vero.login ${JSON.stringify(loginError)}`);
             throw loginError;
         }
-        // const user: apiTypes.user.IUserInfo = (await this.rest.get('/api/user')) as apiTypes.user.IUserInfo;
+
         this.ws = new WSCLient(this.baseUrl, '/socket');
     }
 
