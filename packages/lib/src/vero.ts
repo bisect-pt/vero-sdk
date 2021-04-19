@@ -83,7 +83,7 @@ export default class VERO {
     public async login(username: string, password: string): Promise<void> {
         const loginError = await this.authClient.login(username, password);
         if (loginError) {
-            console.log(`Vero.login ${JSON.stringify(loginError)}`);
+            // console.log(`Vero.login ${JSON.stringify(loginError)}`);
             throw loginError;
         }
 
