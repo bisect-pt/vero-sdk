@@ -24,12 +24,3 @@ export enum Collections {
     captureSources = 'captureSources',
     senderProfiles = 'senderProfiles',
 }
-
-export enum CaptureJobStates {
-    Waiting = 'waiting',
-    Active = 'active',
-    Completed = 'completed',
-    Analyzing = 'analyzing',
-    Analyzed = 'analyzed',
-    Failed = 'failed',
-}

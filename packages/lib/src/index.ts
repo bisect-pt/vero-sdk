@@ -1,3 +1,2 @@
-export * as api  from './api';
-export * as types  from './types';
-export { default as VERO } from './vero';
+export * from '@mipw/vero-api';
+export * from './vero';

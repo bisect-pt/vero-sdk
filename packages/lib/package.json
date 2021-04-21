@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "@bisect/bisect-core-ts": "^0.1.0",
+        "@mipw/vero-api": "0.0.0",
         "form-data": "^4.0.0",
         "http": "0.0.1-security",
         "https": "^1.0.0",

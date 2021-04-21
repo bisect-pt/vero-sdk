@@ -1,4 +1,4 @@
-import { IUserInfo } from './api/user';
+import { IUserInfo } from '@mipw/vero-api';
 import { Transport } from '@bisect/bisect-core-ts';
 import { resolveResponse } from './utils';
 

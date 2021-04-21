@@ -1,4 +1,4 @@
-import { IVersion } from './api/system';
+import { IVersion } from '@mipw/vero-api';
 import { Transport } from '@bisect/bisect-core-ts';
 import { License } from './license';
 import { resolveResponse } from './utils';

@@ -1,5 +1,5 @@
-import { IGeneratorProfile } from './api/senderProfiles';
 import { Transport } from '@bisect/bisect-core-ts';
+import { IGeneratorProfile } from '@mipw/vero-api';
 
 //////////////////////////////////////////////////////////////////////////////
 

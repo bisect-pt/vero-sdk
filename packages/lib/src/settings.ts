@@ -6,8 +6,8 @@ import {
     IGenlockStatus,
     INmosSettings,
     IPtpSettings,
-} from './api/settings';
-import { SocketEvents } from './api/wsEvents';
+    SocketEvents,
+} from '@mipw/vero-api';
 import { Transport } from '@bisect/bisect-core-ts';
 import { resolveResponse } from './utils';
 
@@ -28,9 +28,6 @@ export default class Settings {
         return this.transport.makeAwaiter<IGenlockStatus>(
             SocketEvents.generatorStatus,
             (data: any) => {
-                console.log(`************************************ response: ${JSON.stringify(data)}`);
-                console.log(`************************************ response: ${JSON.stringify(data)}`);
-
                 // TODO: use a proper type for the event
                 const current = _.get(data, '[0].genlock');
                 if (current === undefined) {

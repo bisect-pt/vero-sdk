@@ -7,7 +7,8 @@ export interface IGUIPreferences {
 export interface IPreferences {
     gui: IGUIPreferences;
 }
+
 export interface IUserInfo {
-  username: string;
-  preferences: IPreferences;
+    username: string;
+    preferences: IPreferences;
 }
