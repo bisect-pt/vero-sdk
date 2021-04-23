@@ -24,3 +24,19 @@ export enum Collections {
     captureSources = 'captureSources',
     senderProfiles = 'senderProfiles',
 }
+
+export interface IWsNotifyEvent {
+    tag: string;
+    success: boolean;
+    desc?: string;
+}
+
+export enum WsNotifyEventTag {
+    senderProfileExportCompleted = 'senderprofiles.export.finish',
+}
+export interface ISenderProfileExportNotification extends IWsNotifyEvent {
+    tag: WsNotifyEventTag.senderProfileExportCompleted;
+    data: {
+        correlationId: string;
+    };
+}

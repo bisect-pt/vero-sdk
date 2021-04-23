@@ -33,6 +33,6 @@ export default class System {
     }
 
     public async getStats(): Promise<any> {
-        return await this.transport.get('/api/system/storage/status');
+        return await this.transport.get('/api/system/storage/stats');
     }
 }
