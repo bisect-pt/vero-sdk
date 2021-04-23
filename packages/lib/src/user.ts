@@ -15,4 +15,12 @@ export default class User {
         const data = { oldpwd: oldPassword, password: newPassword };
         return this.transport.post('/api/user/update', data);
     }
+
+    public async revalidateToken(): Promise<any> {
+        return resolveResponse(await this.transport.get('/api/user/revalidate-token'));
+    }
+
+    public async ebuListToken(): Promise<any> {
+        return resolveResponse(await this.transport.get('/api/user/ebu-list-token'));
+    }
 }

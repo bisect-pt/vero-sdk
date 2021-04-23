@@ -13,4 +13,24 @@ export class SenderProfiles {
     public async delete(profileId: string): Promise<void> {
         return this.transport.del(`/api/senderprofile/${profileId}`);
     }
+
+    // public async import(path: string): Promise<void> {
+    //     return this.transport.putForm(`/api/senderprofile/import`, [{ name: 'file', value: path }]);
+    // }
+
+    public async export(): Promise<void> {
+        return this.transport.get(`/api/senderprofile/export`);
+    }
+
+    public async get(profileId: string): Promise<any> {
+        return this.transport.get(`/api/senderprofile/${profileId}`);
+    }
+
+    public async getAll(): Promise<any> {
+        return this.transport.get(`/api/senderprofile`);
+    }
+
+    public async update(profileId: string, profile: IGeneratorProfile): Promise<IGeneratorProfile> {
+        return this.transport.put(`/api/senderprofile/${profileId}`, profile);
+    }
 }

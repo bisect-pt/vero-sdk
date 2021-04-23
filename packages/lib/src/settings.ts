@@ -7,6 +7,7 @@ import {
     INmosSettings,
     IPtpSettings,
     SocketEvents,
+    ISfpInterfaceSettings,
 } from '@mipw/vero-api';
 import { Transport } from '@bisect/bisect-core-ts';
 import { resolveResponse } from './utils';
@@ -58,5 +59,17 @@ export default class Settings {
 
     public async setPtp(settings: Partial<IPtpSettings>): Promise<void> {
         return resolveResponse(await this.transport.post('/api/settings/ptp', settings));
+    }
+
+    public async setIgmp(settings: Partial<any>): Promise<void> {
+        return resolveResponse(await this.transport.post('/api/settings/igmp', settings));
+    }
+
+    public async setSfpsA(settings: Partial<ISfpInterfaceSettings>): Promise<void> {
+        return resolveResponse(await this.transport.post('/api/settings/sfps/A', settings));
+    }
+
+    public async setSfpsB(settings: Partial<ISfpInterfaceSettings>): Promise<void> {
+        return resolveResponse(await this.transport.post('/api/settings/sfps/B', settings));
     }
 }

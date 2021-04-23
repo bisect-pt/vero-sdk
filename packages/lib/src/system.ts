@@ -23,4 +23,16 @@ export default class System {
     public async restartServices(): Promise<void> {
         return await this.transport.post('/api/system/restartServices', {});
     }
+
+    public async getDockerImage(): Promise<any> {
+        return await this.transport.get('/api/system/ebulist/dockerimage');
+    }
+
+    public async setDockerImage(): Promise<void> {
+        return await this.transport.put('/api/system/ebulist/dockerimage', {});
+    }
+
+    public async getStats(): Promise<any> {
+        return await this.transport.get('/api/system/storage/status');
+    }
 }

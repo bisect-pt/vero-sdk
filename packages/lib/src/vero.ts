@@ -5,6 +5,8 @@ import Capture from './capture';
 import Settings from './settings';
 import System from './system';
 import User from './user';
+import Eula from './eula';
+import Logs from './logs';
 import TokenStorage from './tokenStorage';
 import _ from 'lodash';
 
@@ -82,6 +84,14 @@ export class VERO {
 
     public get user() {
         return new User(this.transport);
+    }
+
+    public get eula() {
+        return new Eula(this.transport);
+    }
+
+    public get logs() {
+        return new Logs(this.transport);
     }
 
     public get settings() {
