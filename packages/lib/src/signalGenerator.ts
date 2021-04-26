@@ -1,11 +1,17 @@
 import { Transport } from '@bisect/bisect-core-ts';
 import { SenderProfiles } from './senderProfiles';
-import { GeneratorChannelId, IGeneratorProfile, IGeneratorStatus, StateMachine, SocketEvents } from '@mipw/vero-api';
+import {
+    GeneratorChannelId,
+    IGeneratorProfile,
+    IFullGeneratorStatus,
+    StateMachine,
+    SocketEvents,
+} from '@mipw/vero-api';
 
 //////////////////////////////////////////////////////////////////////////////
 
-const getCurrentProfileId = (data: IGeneratorStatus, channelId: GeneratorChannelId): string | undefined => {
-    const senders = data[0]?.generator?.senders;
+const getCurrentProfileId = (data: IFullGeneratorStatus, channelId: GeneratorChannelId): string | undefined => {
+    const senders = data['0']?.generator?.senders;
 
     if (!senders) {
         return undefined;
@@ -37,9 +43,9 @@ export default class SignalGenerator {
     public makeAwaiter(channelId: GeneratorChannelId, profileId: string, timeoutMs: number): Promise<any> {
         return this.transport.makeAwaiter(
             SocketEvents.generatorStatus,
-            (data: IGeneratorStatus) => {
+            (data: IFullGeneratorStatus): true | undefined => {
                 const id = getCurrentProfileId(data, channelId);
-                return id === profileId;
+                return id === profileId ? true : undefined;
             },
             timeoutMs
         );

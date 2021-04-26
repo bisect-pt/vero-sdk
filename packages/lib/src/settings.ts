@@ -7,6 +7,7 @@ import {
     INmosSettings,
     IPtpSettings,
     SocketEvents,
+    IFullGeneratorStatus,
     ISfpInterfaceSettings,
 } from '@mipw/vero-api';
 import { Transport } from '@bisect/bisect-core-ts';
@@ -28,17 +29,16 @@ export default class Settings {
     public makeGenlockAwaiter(family: GenlockFamily, timeoutMs: number): Promise<IGenlockStatus | undefined> {
         return this.transport.makeAwaiter<IGenlockStatus>(
             SocketEvents.generatorStatus,
-            (data: any) => {
-                // TODO: use a proper type for the event
-                const current = _.get(data, '[0].genlock');
+            (data: IFullGeneratorStatus): IGenlockStatus | undefined => {
+                const current = data?.[0]?.genlock;
                 if (current === undefined) {
-                    return false;
+                    return undefined;
                 }
                 if (!current.locked) {
-                    return false;
+                    return undefined;
                 }
                 if (current.family !== family) {
-                    return false;
+                    return undefined;
                 }
 
                 return current;
@@ -49,8 +49,7 @@ export default class Settings {
 
     public async setGenlockSync(settings: IGenlockSettings, timeoutMs: number): Promise<IGenlockStatus | undefined> {
         await this.setGenlock(settings);
-        const awaiter = this.makeGenlockAwaiter(settings.family, timeoutMs);
-        return await awaiter;
+        return await this.makeGenlockAwaiter(settings.family, timeoutMs);
     }
 
     public async setNmos(settings: Partial<INmosSettings>): Promise<void> {

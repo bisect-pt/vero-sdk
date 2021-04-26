@@ -1,7 +1,7 @@
 import { Unwinder, Transport, RestClient, get, post, WSCLient } from '@bisect/bisect-core-ts';
 import { AuthClient, ILoginData, IApiHandler, IGenericResponse, ILoginResponse } from './auth';
 import SignalGenerator from './signalGenerator';
-import Capture from './capture';
+import { Capture } from './capture';
 import Settings from './settings';
 import System from './system';
 import User from './user';

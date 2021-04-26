@@ -3,3 +3,5 @@ export interface INmosSettings {
     autodiscover: boolean;
     registrationUri: string;
 }
+
+export interface INmosStatus {}

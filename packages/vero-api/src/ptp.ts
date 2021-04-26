@@ -1,3 +1,5 @@
+import { SfpLabel } from './interfaces';
+
 export enum PtpSfpSelection {
     auto = 'auto',
     sfp_a = 'sfp_a',
@@ -30,4 +32,14 @@ export interface IPtpSettings {
     membership_type: PtpMembershipType;
     tos_dscp: string;
     announce_receipt_timeout: string;
+}
+
+export interface IPtpStatus {
+    domain: number;
+    grand_master_id: string;
+    master_id: string;
+    locked: boolean;
+    mean_path_delay: number;
+    offset_from_master: number;
+    sfp_label: SfpLabel;
 }

@@ -37,3 +37,21 @@ export interface ICaptureJob {
     state: CaptureJobStates;
     result?: ISuccessfulCaptureResult;
 }
+
+export interface ISourceNetInfo {
+    primary?: {
+        address: string;
+        sourceAddress?: string;
+    };
+    useRedundancy?: boolean;
+    secondary?: {
+        address: string;
+        sourceAddress?: string;
+    };
+}
+
+export interface ICaptureSource {
+    id: string;
+    meta: { name: string };
+    network: ISourceNetInfo;
+}
