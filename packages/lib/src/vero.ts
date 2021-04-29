@@ -7,8 +7,10 @@ import System from './system';
 import User from './user';
 import Eula from './eula';
 import Logs from './logs';
+import BackupRestoreDatabase from './backupRestoreDatabase';
 import TokenStorage from './tokenStorage';
 import _ from 'lodash';
+import DownloadManager from './downloadManager';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -100,6 +102,14 @@ export class VERO {
 
     public get signalGenerator() {
         return new SignalGenerator(this.transport);
+    }
+
+    public get downloadManager() {
+        return new DownloadManager(this.transport);
+    }
+
+    public get backupRestoreDatabase() {
+        return new BackupRestoreDatabase(this.transport);
     }
 
     public get capture() {

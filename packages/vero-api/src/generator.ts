@@ -2,7 +2,7 @@ import { IEndpoint, IDestinationEndpoint } from './network';
 import { IGenlockStatus } from './genlock';
 import { IPtpStatus } from './ptp';
 import { INmosStatus } from './nmos';
-import { SfpsStatus, SfpsTelemetry, IManagementInterfaceStatus } from './interfaces';
+import { SfpsSettings, SfpsTelemetry, IManagementInterfaceStatus } from './interfaces';
 
 export enum GeneratorChannelId {
     channel1 = '1',
@@ -154,12 +154,23 @@ export interface IGeneratorStatusEntry {
     genlock: IGenlockStatus;
     info: IGeneratorDaemonInfo;
     generator: {
+        errors: IErrorMessage[];
+        genlock: IGenlockStatus;
+        info: IGeneratorDaemonInfo;
         senders: IGeneratorStatus[];
+        license: ILicenseInfo;
+        nic: INicInfo;
+        ptp: IPtpStatus;
+        sfps: SfpsSettings;
+        sfps_telemetry: SfpsTelemetry;
+        warnings: IWarningMessage[];
+        timestamp: number;
+        nmos: INmosStatus;
     };
     license: ILicenseInfo;
     nic: INicInfo;
     ptp: IPtpStatus;
-    sfps: SfpsStatus;
+    sfps: SfpsSettings;
     sfps_telemetry: SfpsTelemetry;
     warnings: IWarningMessage[];
     timestamp: number;

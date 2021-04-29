@@ -1,5 +1,5 @@
 import { Transport } from '@bisect/bisect-core-ts';
-import veroApi, { SocketEvents, IFullGeneratorStatus } from '@mipw/vero-api';
+import { ICaptureJob, ICaptureConfiguration, SocketEvents } from '@mipw/vero-api';
 import { IRxRates, IRateCondition } from './types';
 import { makeCaptureCompletePredicate, makeSfpRatePredicate } from './utils';
 import { Sources } from './sources';
@@ -18,12 +18,12 @@ export class Capture {
         return new Monitor(this.transport);
     }
 
-    public async start(settings: veroApi.ICaptureSettings): Promise<any> {
+    public async start(settings: ICaptureConfiguration): Promise<any> {
         return this.transport.post('/api/capture/capture', settings);
     }
 
     // Returns the capture job or or undefined in case of timeout
-    public makeCaptureAwaiter(captureId: string, timeoutMs: number): Promise<veroApi.ICaptureJob | undefined> {
+    public makeCaptureAwaiter(captureId: string, timeoutMs: number): Promise<ICaptureJob | undefined> {
         return this.transport.makeAwaiter(
             SocketEvents.collectionUpdate,
             makeCaptureCompletePredicate(captureId),

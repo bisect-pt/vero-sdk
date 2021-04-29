@@ -29,9 +29,9 @@ export interface IPtpSettings {
     sfp_selection: PtpSfpSelection;
     delay_mechanism: PtpDelayMechanism;
     mode: PtpMode;
-    membership_type: PtpMembershipType;
     tos_dscp: string;
     announce_receipt_timeout: string;
+    gm_address?: string;
 }
 
 export interface IPtpStatus {
@@ -43,3 +43,9 @@ export interface IPtpStatus {
     offset_from_master: number;
     sfp_label: SfpLabel;
 }
+
+export type PtpMembershipInfo = {
+    membership_type: 'none' | 'igmp_v2' | 'igmp_v3';
+};
+
+export type PtpConfiguration = IPtpSettings & PtpMembershipInfo;

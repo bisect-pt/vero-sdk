@@ -5,9 +5,11 @@ export enum SfpLabel {
     B = 'SFP B',
 }
 
-interface ISfps {
+export interface IManagementInterfaceSettings {}
+
+export interface ISfpInterfaceStatus {
     address: IPAddress;
-    device?: string;
+    device: string;
     dhcp_enabled: boolean;
     gateway: IPAddress;
     mac_address: MacAddress;
@@ -15,37 +17,29 @@ interface ISfps {
 }
 
 export interface ISfpInterfaceSettings {
-    main: ISfps;
-    ptp: ISfps;
-    label: string;
-}
-
-export interface IManagementInterfaceSettings {}
-
-export interface SfpStatus {
     label: SfpLabel;
-    main: ISfps;
-    ptp: ISfps;
+    main: ISfpInterfaceStatus;
+    ptp: ISfpInterfaceStatus;
 }
 
-export type SfpsStatus = SfpStatus[];
+export type SfpsSettings = ISfpInterfaceSettings[];
 
-export interface SfpTelemetry {
+export interface ISfpTelemetry {
     link_active: boolean;
-    link_speed: string;
+    link_speed: string; // '25G', etc.
     module_present: boolean;
     rx_packets: number;
     rx_packets_in_error: number;
-    rx_rate: number;
+    rx_rate: number; // bytes per second
     sfp_module_info: string;
     signal_present: boolean;
     transmit_error: boolean;
     tx_dropped_packets: number;
     tx_packets: number;
-    tx_rate: number;
+    tx_rate: number; // bytes per second
 }
 
-export type SfpsTelemetry = SfpTelemetry[];
+export type SfpsTelemetry = ISfpTelemetry[];
 
 export interface IAddressInfo {
     ipAddr: IPAddress;

@@ -18,9 +18,9 @@ export class SenderProfiles {
         return this.transport.del(`/api/senderprofile/${profileId}`);
     }
 
-    // public async import(path: string): Promise<void> {
-    //     return this.transport.putForm(`/api/senderprofile/import`, [{ name: 'file', value: path }]);
-    // }
+    public async import(path: string, value: any): Promise<void> {
+        return this.transport.putForm(`/api/senderprofile/import`, [{ name: path, value: value }]);
+    }
 
     public async export(correlationId: string): Promise<any> {
         return this.transport.post(`/api/senderprofile/export`, { correlationId });

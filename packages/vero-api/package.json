@@ -3,21 +3,27 @@
     "version": "0.0.0",
     "description": "",
     "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "module": "dist/index.es.js",
+    "jsnext:main": "dist/index.es.js",
     "private": true,
     "files": [
         "**/*"
     ],
     "scripts": {
-        "build": "npm run clean && npm run compile",
-        "clean": "rm -rf ./dist",
-        "compile": "tsc"
+        "build": "npm run clean && npm run compile && npm run rollup",
+        "clean": "rm -rf ./build ./dist",
+        "compile": "tsc",
+        "rollup": "npx rollup -c"
     },
     "keywords": [],
     "author": "MIPW Lda. <hello@mipw.pt> (www.mipw.pt)",
     "license": "UNLICENSED",
     "devDependencies": {
+        "@rollup/plugin-typescript": "^8.2.1",
         "@types/node": "^14.11.2",
+        "rollup-plugin-dts": "^3.0.1",
+        "rollup-plugin-node-resolve": "^5.2.0",
+        "rollup-plugin-terser": "^7.0.2",
         "tslint": "^5.20.1",
         "tslint-config-prettier": "^1.18.0",
         "tslint-consistent-codestyle": "^1.16.0",
@@ -25,5 +31,8 @@
         "tslint-microsoft-contrib": "^6.2.0",
         "typescript": "^4.0.5"
     },
-    "dependencies": {}
+    "dependencies": {
+        "@bisect/bisect-core-ts": "^0.1.0",
+        "@bisect/ebu-list-sdk": "^0.1.0"
+    }
 }

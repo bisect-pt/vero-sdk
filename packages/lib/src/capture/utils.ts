@@ -1,4 +1,4 @@
-import { ICaptureJob, IFullGeneratorStatus, Collections, CaptureJobStates, SfpLabel } from '@mipw/vero-api';
+import { ICaptureJob, IFullGeneratorStatus, Collections, CaptureJobState, SfpLabel } from '@mipw/vero-api';
 import { IRxRates, IRateCondition } from './types';
 
 export function getRxRates(status: IFullGeneratorStatus): IRxRates | undefined {
@@ -60,7 +60,7 @@ export const makeCaptureCompletePredicate = (captureId: string) => (data: any): 
     if (!job) {
         return undefined;
     }
-    if (job.state === CaptureJobStates.Completed || job.state === CaptureJobStates.Failed) {
+    if (job.state === CaptureJobState.Completed || job.state === CaptureJobState.Failed) {
         return job;
     }
     return undefined;

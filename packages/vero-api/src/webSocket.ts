@@ -1,7 +1,9 @@
+import { IMonitoredCaptureSource } from './capture';
+
 export enum SocketEvents {
     /*
     Collection update
-    Payload= {
+    Payload: {
         collection : string - one of the identifiers in collections below
         added : undefined | [an array of added objects]
         deletedIDs : undefined | [an array of IDs of deleted objects]
@@ -15,8 +17,9 @@ export enum SocketEvents {
     systemUpdate = 'SYSTEM_UPDATE',
     downloadManagerUpdate = 'DOWNLOAD_MANAGER_UPDATE',
     generatorStatus = 'GENERATOR_STATUS',
-    capturestatus = 'CAPTURE_STATUS',
-    captureJobStatus = 'CAPTUREJOB_STATUS',
+    captureStatus = 'CAPTURE_STATUS',
+    captureMonitorStatus = 'CAPTURE_MONITOR_STATUS', // ICaptureMonitorStatusEvent
+    dockerImageUpdate = 'DOCKER_IMAGE_UPDATE',
 }
 
 export enum Collections {
@@ -33,10 +36,31 @@ export interface IWsNotifyEvent {
 
 export enum WsNotifyEventTag {
     senderProfileExportCompleted = 'senderprofiles.export.finish',
+    backupDatabaseCompleted = 'backup.finished',
+    logsExportCompleted = 'logs.exporter.finish',
 }
+
 export interface ISenderProfileExportNotification extends IWsNotifyEvent {
     tag: WsNotifyEventTag.senderProfileExportCompleted;
     data: {
         correlationId: string;
     };
+}
+
+export interface IBackupDatabaseNotification extends IWsNotifyEvent {
+    tag: WsNotifyEventTag.backupDatabaseCompleted;
+    data: {
+        correlationId: string;
+    };
+}
+
+export interface ILogsExportNotification extends IWsNotifyEvent {
+    tag: WsNotifyEventTag.logsExportCompleted;
+    data: {
+        correlationId: string;
+    };
+}
+
+export interface ICaptureMonitorStatusEvent {
+    sources: IMonitoredCaptureSource[];
 }
