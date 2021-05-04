@@ -29,15 +29,43 @@ export interface ISenderMulticastAddress {
 
 export type ISenderMulticastAddresses = Array<ISenderMulticastAddress>;
 
-export interface ISender {}
+export interface IAudioSettings {
+    audioChannels: string; // TODO: constrain
+    packetTime: string; // TODO: constrain
+}
 
 export interface IAlphaSettings {
     format: 'Y' | 'YUV';
 }
 
-export interface IAudioSettings {
-    audioChannels: string; // TODO: constrain
-    packetTime: string; // TODO: constrain
+export interface IVideoSettings {
+    resolution: string;
+    schedule: {
+        kind: string;
+        tr_offset_delay?: string;
+        trs_delay?: string;
+        distribution_mode?: string;
+    };
+}
+export interface IAncSettings {
+    //TODO
+}
+
+export type MediaSpecificSettings = IVideoSettings | IAudioSettings | IAncSettings | IAlphaSettings;
+
+export interface ISenderNetwork {
+    enabled: boolean;
+    useDefaultAddress?: boolean;
+    useRedundancy?: boolean;
+    primary?: { destAddr: string; destPort: string };
+    secondary?: { destAddr: string; destPort: string };
+    rtp?: { tsDelta: string; payloadId: string; ssrc: string };
+}
+
+export interface ISender {
+    isActive: boolean;
+    network: ISenderNetwork;
+    settings?: MediaSpecificSettings;
 }
 
 export interface IGeneratorProfile {
