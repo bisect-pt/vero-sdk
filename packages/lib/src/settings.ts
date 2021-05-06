@@ -6,6 +6,7 @@ import {
     IGenlockStatus,
     INmosSettings,
     IPtpSettings,
+    INtpSettings,
     SocketEvents,
     IFullGeneratorStatus,
     ISfpInterfaceSettings,
@@ -58,6 +59,10 @@ export default class Settings {
 
     public async setPtp(settings: Partial<IPtpSettings>): Promise<void> {
         return resolveResponse(await this.transport.post('/api/settings/ptp', settings));
+    }
+
+    public async setNtp(settings: Partial<INtpSettings>): Promise<void> {
+        return resolveResponse(await this.transport.post('/api/settings/ntp', settings));
     }
 
     public async setIgmp(settings: Partial<any>): Promise<void> {

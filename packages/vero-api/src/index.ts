@@ -5,6 +5,7 @@ export * from './igmp';
 export * from './interfaces';
 export * from './nmos';
 export * from './ptp';
+export * from './ntp';
 export * from './settings';
 export * from './system';
 export * from './network';

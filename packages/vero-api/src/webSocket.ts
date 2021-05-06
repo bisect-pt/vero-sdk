@@ -1,4 +1,6 @@
 import { IMonitoredCaptureSource } from './capture';
+import { INtpStatus } from './ntp';
+import { IError } from './types';
 
 export enum SocketEvents {
     /*
@@ -63,4 +65,11 @@ export interface ILogsExportNotification extends IWsNotifyEvent {
 
 export interface ICaptureMonitorStatusEvent {
     sources: IMonitoredCaptureSource[];
+}
+
+export interface ISystemStatusEvent {
+    systemTime: Date;
+    ntp: INtpStatus;
+    errors: IError[];
+    warnings: IError[];
 }
