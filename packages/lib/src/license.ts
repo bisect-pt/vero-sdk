@@ -1,4 +1,5 @@
 import { Transport } from '@bisect/bisect-core-ts';
+import fs from 'fs';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -14,6 +15,7 @@ export class License {
     }
 
     public async export(outputLocationFile: string): Promise<any> {
-        return this.transport.downloadFile('/api/license/export', outputLocationFile);
+        const stream = fs.createWriteStream(outputLocationFile);
+        return this.transport.downloadFile('/api/license/export', stream);
     }
 }
