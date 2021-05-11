@@ -15,7 +15,7 @@ export class License {
     }
 
     public async export(outputLocationFile: string): Promise<any> {
-        const stream = fs.createWriteStream(outputLocationFile);
-        return this.transport.downloadFile('/api/license/export', stream);
+        const outputStream = fs.createWriteStream(outputLocationFile);
+        return this.transport.downloadFile('/api/license/export', outputStream);
     }
 }
