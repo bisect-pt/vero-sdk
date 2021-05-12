@@ -4,6 +4,7 @@ import { IRxRates, IRateCondition } from './types';
 import { makeCaptureCompletePredicate, makeSfpRatePredicate } from './utils';
 import { Sources } from './sources';
 import { Monitor } from './monitor';
+import { Jobs } from './jobs';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -16,6 +17,10 @@ export class Capture {
 
     public get monitor() {
         return new Monitor(this.transport);
+    }
+
+    public get jobs() {
+        return new Jobs(this.transport);
     }
 
     public async start(settings: ICaptureConfiguration): Promise<any> {

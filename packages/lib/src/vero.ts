@@ -1,4 +1,5 @@
 import { Unwinder, Transport, RestClient, get, post, WSCLient } from '@bisect/bisect-core-ts';
+import { LIST } from '@bisect/ebu-list-sdk';
 import { AuthClient, ILoginData, IApiHandler, IGenericResponse, ILoginResponse } from './auth';
 import SignalGenerator from './signalGenerator';
 import { Capture } from './capture';
@@ -30,10 +31,11 @@ export class VERO {
 
     private ws?: WSCLient = undefined;
 
-    public constructor(private readonly baseUrl: string) {
+    public constructor(private readonly address: string) {
         const unwinder = new Unwinder();
 
         try {
+            const baseUrl = `https://${address}`;
             const apiHandler = makeApiHandler(baseUrl);
             const storage = new TokenStorage();
             this.authClient = new AuthClient(apiHandler, storage);
@@ -69,11 +71,18 @@ export class VERO {
             throw loginError;
         }
 
-        this.ws = new WSCLient(this.baseUrl, '/socket');
+        this.ws = new WSCLient(`https://${this.address}`, '/socket');
     }
 
     public async logout(): Promise<void> {
         return this.transport.post('/auth/logout', {});
+    }
+
+    public async getList(): Promise<LIST> {
+        const list = new LIST(`http://${this.address}:8080`);
+        const ebuListToken = await this.user.ebuListToken();
+        list.setToken(ebuListToken.token);
+        return list;
     }
 
     public get wsClient(): SocketIOClient.Socket | undefined {
