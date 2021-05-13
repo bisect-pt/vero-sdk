@@ -11,3 +11,13 @@ export interface INtpSettings {
     // A list of space-separated addresses for NTP servers.
     serverAddress?: string;
 }
+
+export function isINtpSettings(data: unknown): data is INtpSettings {
+    const d = (data as INtpSettings) ?? {};
+
+    if (typeof d.useSystem === 'boolean') {
+        return true;
+    }
+
+    return false;
+}
