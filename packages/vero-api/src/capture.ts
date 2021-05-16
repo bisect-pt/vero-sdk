@@ -7,6 +7,7 @@ export interface ICaptureConfiguration {
     duration: number; // In seconds
     sfpAEnabled: boolean;
     sfpBEnabled: boolean;
+    enableListAnalysis: boolean; // Perform the analysis automatically using EBU LIST
 }
 
 export interface IListAnalysisSummary {
