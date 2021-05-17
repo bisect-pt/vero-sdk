@@ -17,7 +17,7 @@ export interface IListAnalysisSummary {
 }
 
 export interface ICaptureJobResult {
-    analysis: IListAnalysisSummary;
+    analysis?: IListAnalysisSummary;
     fileSize: number; // pcap file size in bytes
     sfpAEnabled: boolean;
     sfpBEnabled: boolean;
