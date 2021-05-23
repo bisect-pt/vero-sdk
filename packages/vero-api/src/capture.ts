@@ -113,3 +113,25 @@ export interface ICaptureSource {
     meta: { name: string };
     network: ISourceNetInfo;
 }
+
+export interface ITransport {
+    multicastAddress: string;
+    destinationPort: string;
+    sourceAddress?: string;
+}
+
+export interface IConnectorStatus {
+    enabled: boolean;
+    kind: 'video' | 'audio' | 'anc';
+    index: number; // 0-based index of that kind
+    primary: ITransport;
+    secondary?: ITransport;
+}
+
+export type ConnectorsStatus = IConnectorStatus[];
+
+export interface IConnectorsGroupsStatus {
+    video: ConnectorsStatus;
+    audio: ConnectorsStatus;
+    anc: ConnectorsStatus;
+}

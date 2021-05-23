@@ -1,4 +1,4 @@
-import { IMonitoredCaptureSource } from './capture';
+import { IMonitoredCaptureSource, IConnectorsGroupsStatus } from './capture';
 import { INtpStatus } from './ntp';
 import { IError } from './types';
 
@@ -65,6 +65,7 @@ export interface ILogsExportNotification extends IWsNotifyEvent {
 
 export interface ICaptureMonitorStatusEvent {
     sources: IMonitoredCaptureSource[];
+    connectors: IConnectorsGroupsStatus;
 }
 
 export interface ISystemStatusEvent {
