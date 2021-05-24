@@ -65,7 +65,7 @@ export interface ILogsExportNotification extends IWsNotifyEvent {
 
 export interface ICaptureMonitorStatusEvent {
     sources: IMonitoredCaptureSource[];
-    connectors: IConnectorsGroupsStatus;
+    connectors?: IConnectorsGroupsStatus;
 }
 
 export interface ICaptureStatusEvent {
