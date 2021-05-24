@@ -68,6 +68,15 @@ export interface ICaptureMonitorStatusEvent {
     connectors: IConnectorsGroupsStatus;
 }
 
+export interface ICaptureStatusEvent {
+    connectors: IConnectorsGroupsStatus;
+}
+
+export function isCaptureStatusEvent(v: unknown): v is ICaptureStatusEvent {
+    if (!(v as ICaptureStatusEvent).connectors) return false;
+
+    return true;
+}
 export interface ISystemStatusEvent {
     systemTime: Date;
     ntp: INtpStatus;
