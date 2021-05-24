@@ -46,6 +46,7 @@ export interface IVideoSettings {
         trs_delay?: string;
         distribution_mode?: string;
     };
+    patternId: string;
 }
 export interface IAncSettings {
     //TODO
