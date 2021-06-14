@@ -43,15 +43,9 @@ export interface ICaptureJob {
 }
 
 export interface ISourceNetInfo {
-    primary?: {
-        address: string;
-        sourceAddress?: string;
-    };
+    primary?: ITransport;
     useRedundancy?: boolean;
-    secondary?: {
-        address: string;
-        sourceAddress?: string;
-    };
+    secondary?: ITransport;
 }
 
 export interface ICaptureSource {
@@ -77,15 +71,12 @@ export interface IMonitoredCaptureInfo {
 
 export type IMonitoredCaptureSource = ICaptureSource & IMonitoredCaptureInfo;
 
-export interface ISubscribeMessage {
-    sessionId: string;
-    sources: ICaptureSource[];
+export interface IConnectorPatchRequest {
+    enabled: boolean;
+    source?: ICaptureSource;
 }
 
-export interface IUnsubscribeMessage {
-    sessionId: string;
-    sourceIds: string[];
-}
+export type ConnectorKind = 'video' | 'audio' | 'anc';
 
 export interface ISfpMonitorState {
     streams: listApi.pcap.IStreamInfo[];
@@ -94,18 +85,6 @@ export interface ISfpMonitorState {
 export interface IMonitorState {
     A: ISfpMonitorState;
     B: ISfpMonitorState;
-}
-
-export interface ISourceNetInfo {
-    primary?: {
-        address: string;
-        sourceAddress?: string;
-    };
-    useRedundancy?: boolean;
-    secondary?: {
-        address: string;
-        sourceAddress?: string;
-    };
 }
 
 export interface ICaptureSource {
@@ -120,12 +99,28 @@ export interface ITransport {
     sourceAddress?: string;
 }
 
+export interface INmosConnectorInfo {
+    senderId?: string;
+}
+
+export interface ILocalSourceConnectorInfo {
+    id?: string;
+    description: string;
+}
+
 export interface IConnectorStatus {
     enabled: boolean;
-    kind: 'video' | 'audio' | 'anc';
+    description: string;
+    kind: ConnectorKind;
     index: number; // 0-based index of that kind
     primary: ITransport;
     secondary?: ITransport;
+    monitor?: {
+        primary?: IMonitoredData;
+        secondary?: IMonitoredData;
+    };
+    nmos?: INmosConnectorInfo;
+    localSource?: ILocalSourceConnectorInfo;
 }
 
 export type ConnectorsStatus = IConnectorStatus[];

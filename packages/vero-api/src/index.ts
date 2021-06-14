@@ -13,4 +13,3 @@ export * from './user';
 export * from './webSocket';
 export * from './network';
 export * from './types';
-export * from './utils';
