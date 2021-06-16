@@ -24,6 +24,7 @@ export enum PtpMembershipType {
 }
 
 export interface IPtpSettings {
+    enabled: boolean;
     domain: string;
     autodiscover: boolean;
     sfp_selection: PtpSfpSelection;
