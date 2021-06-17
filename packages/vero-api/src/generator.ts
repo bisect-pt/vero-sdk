@@ -47,6 +47,7 @@ export interface IVideoSettings {
         distribution_mode?: string;
     };
     patternId: string;
+    enableMovingBar: boolean;
 }
 export interface IAncSettings {
     //TODO
