@@ -41,7 +41,14 @@ export class VERO {
             this.authClient = new AuthClient(apiHandler, storage);
             unwinder.add(() => this.authClient.close());
 
-            this.rest = new RestClient(baseUrl, this.authClient.getToken.bind(this.authClient));
+            const unauthorizedResponse = (code: number | undefined): boolean => {
+                if (code === 401 || code === 402 || code === 403) {
+                    return false;
+                }
+
+                return true;
+            };
+            this.rest = new RestClient(baseUrl, this.authClient.getToken.bind(this.authClient), unauthorizedResponse);
             const wsGetter = () => {
                 if (this.ws === undefined) {
                     throw new Error('Not logged in');

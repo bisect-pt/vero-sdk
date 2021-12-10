@@ -82,7 +82,7 @@ export class AuthClient {
             return undefined;
         } catch (err) {
             this.invalidateToken();
-            return err;
+            return err as Error;
         }
     }
 
