@@ -8,6 +8,7 @@ export interface ICaptureConfiguration {
     sfpAEnabled: boolean;
     sfpBEnabled: boolean;
     enableListAnalysis: boolean; // Perform the analysis automatically using EBU LIST
+    truncate: boolean; // Perform the analysis automatically using EBU LIST
 }
 
 export interface IListAnalysisSummary {
@@ -21,6 +22,7 @@ export interface ICaptureJobResult {
     fileSize: number; // pcap file size in bytes
     sfpAEnabled: boolean;
     sfpBEnabled: boolean;
+    truncate: boolean;
 }
 
 export enum CaptureJobState {
