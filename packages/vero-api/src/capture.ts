@@ -1,4 +1,3 @@
-import { IDuration } from '@bisect/bisect-core-ts';
 import { api as listApi } from '@bisect/ebu-list-sdk';
 
 export interface ICaptureConfiguration {
@@ -37,7 +36,7 @@ export enum CaptureJobState {
 export interface ICaptureJob {
     id: string;
     name: string;
-    duration: IDuration;
+    duration: number; // milliseconds
     requestTime: string; // TODO Date
     completionTime?: string; // TODO Date
     state: CaptureJobState;

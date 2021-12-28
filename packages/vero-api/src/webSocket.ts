@@ -15,6 +15,7 @@ export enum SocketEvents {
     collectionUpdate = 'COLLECTION_UPDATE',
     notify = 'NOTIFY',
     systemStatus = 'SYSTEM_STATUS',
+    currentCapture = 'CURRENT_CAPTURE', // ICaptureJob
     interruptSystem = 'INTERRUPT_SYSTEM',
     systemUpdate = 'SYSTEM_UPDATE',
     downloadManagerUpdate = 'DOWNLOAD_MANAGER_UPDATE',
