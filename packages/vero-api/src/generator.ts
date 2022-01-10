@@ -104,6 +104,7 @@ export interface IBaseSenderStatus {
         primary: IDestinationEndpoint;
         secondary?: IDestinationEndpoint;
     };
+    nmosSenderId?: string;
 }
 
 export interface IAlphaSenderStatus extends IBaseSenderStatus {}
