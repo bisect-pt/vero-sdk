@@ -27,6 +27,7 @@ export interface ICaptureJobResult {
 export enum CaptureJobState {
     Waiting = 'waiting',
     Active = 'active',
+    Stopped = 'stopped',
     Completed = 'completed',
     Analyzing = 'analyzing',
     Analyzed = 'analyzed',
