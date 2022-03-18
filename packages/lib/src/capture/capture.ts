@@ -1,5 +1,11 @@
 import { Transport } from '@bisect/bisect-core-ts';
-import { ICaptureJob, ICaptureConfiguration, SocketEvents } from '@mipw/vero-api';
+import {
+    ICaptureJob,
+    ICaptureConfiguration,
+    SocketEvents,
+    IConnectorPatchRequest,
+    ConnectorKind,
+} from '@mipw/vero-api';
 import { IRxRates, IRateCondition } from './types';
 import { makeCaptureCompletePredicate, makeSfpRatePredicate } from './utils';
 import { Sources } from './sources';
@@ -25,6 +31,14 @@ export class Capture {
 
     public async start(settings: ICaptureConfiguration): Promise<any> {
         return this.transport.post('/api/capture/capture', settings);
+    }
+
+    public async selectSource(
+        connectorKind: ConnectorKind,
+        index: number,
+        connectorSource: IConnectorPatchRequest
+    ): Promise<any> {
+        return this.transport.patch(`/api/capture/connectors/${connectorKind}/${index}`, connectorSource);
     }
 
     // Returns the capture job or or undefined in case of timeout

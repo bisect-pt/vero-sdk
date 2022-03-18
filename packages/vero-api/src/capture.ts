@@ -7,7 +7,7 @@ export interface ICaptureConfiguration {
     sfpAEnabled: boolean;
     sfpBEnabled: boolean;
     enableListAnalysis: boolean; // Perform the analysis automatically using EBU LIST
-    truncate: boolean; // Perform the analysis automatically using EBU LIST
+    // truncate: boolean; // Perform the analysis automatically using EBU LIST
 }
 
 export interface IListAnalysisSummary {
