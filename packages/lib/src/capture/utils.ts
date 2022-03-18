@@ -1,6 +1,7 @@
 import { ICaptureJob, IFullGeneratorStatus, Collections, CaptureJobState, SfpLabel } from '@mipw/vero-api';
 import { IRxRates, IRateCondition } from './types';
 
+// Rates returned as bit/s
 export function getRxRates(status: IFullGeneratorStatus): IRxRates | undefined {
     const telemetry = status?.[0]?.sfps_telemetry;
     if (!telemetry) {
@@ -8,8 +9,8 @@ export function getRxRates(status: IFullGeneratorStatus): IRxRates | undefined {
     }
 
     return {
-        [SfpLabel.A]: telemetry[0]?.rx_rate ?? 0,
-        [SfpLabel.B]: telemetry[1]?.rx_rate ?? 0,
+        [SfpLabel.A]: (telemetry[0]?.rx_rate ?? 0) * 8,
+        [SfpLabel.B]: (telemetry[1]?.rx_rate ?? 0) * 8,
     };
 }
 
@@ -51,28 +52,30 @@ function isConditionFulfilled(rates: IRxRates, condition: IRateCondition): boole
 export const areConditionsFulfilled = (rates: IRxRates, conditions: IRateCondition[]): boolean =>
     conditions.every((condition) => isConditionFulfilled(rates, condition));
 
-export const makeCaptureCompletePredicate = (captureId: string) => (data: any): ICaptureJob | undefined => {
-    if (data.collection !== Collections.captureJobs) {
+export const makeCaptureCompletePredicate =
+    (captureId: string) =>
+    (data: any): ICaptureJob | undefined => {
+        if (data.collection !== Collections.captureJobs) {
+            return undefined;
+        }
+        const updated = data.updated || [];
+        const job = updated.find((u: ICaptureJob) => u.id === captureId);
+        if (!job) {
+            return undefined;
+        }
+        if (job.state === CaptureJobState.Completed || job.state === CaptureJobState.Failed) {
+            return job;
+        }
         return undefined;
-    }
-    const updated = data.updated || [];
-    const job = updated.find((u: ICaptureJob) => u.id === captureId);
-    if (!job) {
+    };
+
+export const makeSfpRatePredicate =
+    (conditions: IRateCondition[]) =>
+    (data: IFullGeneratorStatus): IRxRates | undefined => {
+        const rates = getRxRates(data);
+        if (rates !== undefined && areConditionsFulfilled(rates, conditions)) {
+            return rates;
+        }
+
         return undefined;
-    }
-    if (job.state === CaptureJobState.Completed || job.state === CaptureJobState.Failed) {
-        return job;
-    }
-    return undefined;
-};
-
-export const makeSfpRatePredicate = (conditions: IRateCondition[]) => (
-    data: IFullGeneratorStatus
-): IRxRates | undefined => {
-    const rates = getRxRates(data);
-    if (rates !== undefined && areConditionsFulfilled(rates, conditions)) {
-        return rates;
-    }
-
-    return undefined;
-};
+    };
