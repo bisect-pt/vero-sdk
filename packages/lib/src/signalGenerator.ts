@@ -6,11 +6,12 @@ import {
     IFullGeneratorStatus,
     StateMachine,
     SocketEvents,
+    IGeneratorStatus,
 } from '@mipw/vero-api';
 
 //////////////////////////////////////////////////////////////////////////////
 
-const getCurrentProfileId = (data: IFullGeneratorStatus, channelId: GeneratorChannelId): string | undefined => {
+const getCurrentProfile = (data: IFullGeneratorStatus, channelId: GeneratorChannelId): IGeneratorStatus | undefined => {
     const senders = data['0']?.generator?.senders;
 
     if (!senders) {
@@ -20,12 +21,19 @@ const getCurrentProfileId = (data: IFullGeneratorStatus, channelId: GeneratorCha
     if (!sender) {
         return undefined;
     }
-    const generatorProfileId = sender.generator_profile_id;
     const status = sender.status;
 
     if (status !== StateMachine.Started) {
         return undefined;
     }
+    return sender;
+};
+
+const getCurrentProfileId = (data: IFullGeneratorStatus, channelId: GeneratorChannelId): string | undefined => {
+    const sender = getCurrentProfile(data, channelId);
+    if(sender === undefined) return undefined;
+    
+    const generatorProfileId = sender.generator_profile_id;
     return generatorProfileId;
 };
 
@@ -43,9 +51,9 @@ export default class SignalGenerator {
     public makeAwaiter(channelId: GeneratorChannelId, profileId: string, timeoutMs: number): Promise<any> {
         return this.transport.makeAwaiter(
             SocketEvents.generatorStatus,
-            (data: IFullGeneratorStatus): true | undefined => {
+            (data: IFullGeneratorStatus): IGeneratorStatus | undefined => {
                 const id = getCurrentProfileId(data, channelId);
-                return id === profileId ? true : undefined;
+                return id === profileId ? getCurrentProfile(data, channelId) : undefined;
             },
             timeoutMs
         );
